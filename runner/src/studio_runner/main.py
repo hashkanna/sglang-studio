@@ -152,6 +152,10 @@ def main() -> None:
                 backend=claimed["backend"],
                 prompt=claimed["prompt"],
                 parameters=claimed["parameters"] or {},
+                mode=claimed.get("mode") or "benchmark",
+                score_input=claimed.get("score_input"),
+                mask_config=claimed.get("mask_config"),
+                tolerance=claimed.get("tolerance"),
             )
             artifact_key = _upload_result_artifact(client, claimed["id"], result)
             _mark_succeeded(session, claimed["id"], result, artifact_key)

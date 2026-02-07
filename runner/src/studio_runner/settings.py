@@ -20,6 +20,7 @@ class Settings(BaseSettings):
     sglang_jax_bench_command: str | None = None
     sglang_jax_python_executable: str = "python3"
     sglang_jax_bench_timeout_seconds: int = 900
+    sglang_jax_score_api_url: str | None = None
 
     sglang_pytorch_adapter_mode: str = "auto"
     sglang_pytorch_root: str = "/workspaces/sglang"
@@ -27,6 +28,10 @@ class Settings(BaseSettings):
     sglang_pytorch_bench_command: str | None = None
     sglang_pytorch_python_executable: str = "python3"
     sglang_pytorch_bench_timeout_seconds: int = 600
+    sglang_pytorch_score_api_url: str | None = None
+
+    score_api_timeout_seconds: float = 30.0
+    score_debug_max_tokens: int = 1024
 
     model_config = SettingsConfigDict(env_prefix="STUDIO_", extra="ignore")
 

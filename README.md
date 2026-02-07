@@ -49,6 +49,7 @@ Milestone 1 kickoff:
 - `sglang-pytorch` runner adapter is wired in wrap-first mode (`STUDIO_SGLANG_PYTORCH_ADAPTER_MODE=auto`).
 - Runner attempts to execute `sglang-jax` benchmark entrypoints and parses latency/throughput from benchmark output.
 - Runner attempts to execute `sglang-pytorch` benchmark entrypoints and parses latency/throughput from benchmark output.
+- API supports structured run payloads for `mode=score` (`score_input`, `mask_config`, `tolerance`).
 - If the local benchmark environment is unavailable, runner falls back to deterministic mock results and records adapter error details in `result_json.adapter_error`.
 
 ## Quickstart
@@ -72,6 +73,10 @@ Run modes for benchmark adapters (runner env):
 - `auto` (default): try real benchmark wrapper, fallback to mock.
 - `bench`: require real benchmark wrapper (run fails on adapter errors).
 - `mock`: force deterministic mock results.
+
+Score-mode adapter execution (runner env):
+- `mode=score` uses real `/v1/score` execution for JAX/PyTorch unless adapter mode is explicitly `mock`.
+- Configure score endpoints with `STUDIO_SGLANG_JAX_SCORE_API_URL` and `STUDIO_SGLANG_PYTORCH_SCORE_API_URL`.
 
 Run smoke validation:
 

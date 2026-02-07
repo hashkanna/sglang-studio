@@ -160,3 +160,74 @@ def test_run_backend_inference_pytorch_bench_mode_propagates_error(
             prompt="prompt",
             parameters={},
         )
+
+
+def test_run_backend_inference_score_mode_mock_backend() -> None:
+    out = adapters.run_backend_inference(
+        run_id="run-8",
+        backend="mock",
+        mode="score",
+        prompt="prompt",
+        parameters={},
+        score_input={"query": "Is Paris in France?", "items": [" yes", " no"]},
+        mask_config={"preset": "none"},
+        tolerance={"abs_epsilon": 1e-6, "rel_epsilon": 0.0},
+    )
+    assert out["mode"] == "score"
+    assert "token_logprobs" in out
+    assert out["adapter_version"] == "mock-score-v1"
+
+
+def test_run_backend_inference_jax_score_mode_uses_real_adapter(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(settings, "sglang_jax_adapter_mode", "auto")
+    monkeypatch.setattr(
+        adapters,
+        "run_score_api_inference",
+        lambda **kwargs: {
+            "score": -1.2,
+            "latency_ms": 12.0,
+            "throughput_items_per_s": 30.0,
+            "token_count": 3,
+            "mode": "score",
+            "backend": "sglang-jax",
+            "adapter_version": "score-api-wrap-v1",
+            "tokens": ["a", "b", "c"],
+            "token_logprobs": [-0.1, -0.2, -0.3],
+            "token_nll": [0.1, 0.2, 0.3],
+            "token_ranks": [1, 1, 1],
+        },
+    )
+
+    out = adapters.run_backend_inference(
+        run_id="run-9",
+        backend="sglang-jax",
+        mode="score",
+        prompt="prompt",
+        parameters={},
+        score_input={"query": "Q", "items": ["A"]},
+    )
+    assert out["mode"] == "score"
+    assert out["adapter_version"] == "score-api-wrap-v1"
+
+
+def test_run_backend_inference_jax_score_mode_requires_real_or_mock(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(settings, "sglang_jax_adapter_mode", "auto")
+
+    def _raise(**kwargs):
+        raise AdapterExecutionError("missing endpoint")
+
+    monkeypatch.setattr(adapters, "run_score_api_inference", _raise)
+
+    with pytest.raises(AdapterExecutionError, match="missing endpoint"):
+        adapters.run_backend_inference(
+            run_id="run-10",
+            backend="sglang-jax",
+            mode="score",
+            prompt="prompt",
+            parameters={},
+            score_input={"query": "Q", "items": ["A"]},
+        )
