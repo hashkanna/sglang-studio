@@ -57,3 +57,4 @@ Exit Criteria
 ## Deferred Backlog
 
 - Runtime engineering feedback triage and prioritized follow-ups: `docs/010-runtime-engineering-feedback-triage.md`
+- Product value-gap triage and M1 prioritization update: `docs/011-product-value-gap-triage.md`

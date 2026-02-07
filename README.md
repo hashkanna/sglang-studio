@@ -36,6 +36,7 @@ It is designed for:
 - Testing strategy: `docs/008-testing-strategy.md`
 - Inspiration and comparables: `docs/009-inspiration-and-comparables.md`
 - Runtime engineering feedback triage: `docs/010-runtime-engineering-feedback-triage.md`
+- Product value-gap triage: `docs/011-product-value-gap-triage.md`
 
 ## Status
 
