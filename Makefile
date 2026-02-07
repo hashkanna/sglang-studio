@@ -1,7 +1,10 @@
-.PHONY: up down logs ps test smoke lint fmt
+.PHONY: up up-core down logs ps test smoke runner-local runner-local-dual-bench lint fmt
 
 up:
 	docker compose up --build -d
+
+up-core:
+	docker compose up --build -d postgres minio api
 
 ps:
 	docker compose ps
@@ -17,3 +20,9 @@ test:
 
 smoke:
 	bash scripts/smoke_compose.sh
+
+runner-local:
+	bash scripts/run_runner_host.sh
+
+runner-local-dual-bench:
+	STUDIO_SGLANG_JAX_ADAPTER_MODE=bench STUDIO_SGLANG_PYTORCH_ADAPTER_MODE=bench bash scripts/run_runner_host.sh

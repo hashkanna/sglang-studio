@@ -75,6 +75,20 @@ Run smoke validation:
 make smoke
 ```
 
+Run API/DB in compose and run runner on host (for real bench adapters):
+
+```bash
+make up-core
+make runner-local
+```
+
+`runner-local` defaults:
+- JAX adapter mode: `bench`
+- PyTorch adapter mode: `mock`
+- DB/MinIO endpoints: `localhost`
+
+Use `make runner-local-dual-bench` to force `bench` mode for both adapters.
+
 Stop and clean up:
 
 ```bash
