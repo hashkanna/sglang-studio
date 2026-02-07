@@ -11,7 +11,7 @@ from sqlalchemy import text
 from sqlalchemy.orm import Session
 
 from studio_runner.adapters import run_backend_inference
-from studio_runner.db import SessionLocal
+from studio_runner.db import SessionLocal, engine
 from studio_runner.models import Run
 from studio_runner.settings import settings
 
@@ -81,8 +81,13 @@ def _claim_pending_run(session: Session) -> dict | None:
         return {
             "id": run.id,
             "backend": run.backend,
+            "mode": run.mode,
             "prompt": run.prompt,
             "parameters": run.parameters,
+            "score_input": run.score_input,
+            "mask_config": run.mask_config,
+            "tolerance": run.tolerance,
+            "repro_metadata": run.repro_metadata,
         }
 
 
@@ -110,9 +115,28 @@ def _mark_failed(session: Session, run_id: str, error: str) -> None:
         run.updated_at = _utcnow()
 
 
+def _apply_online_schema_migrations() -> None:
+    statements = [
+        "ALTER TABLE runs ADD COLUMN IF NOT EXISTS mode VARCHAR(16) NOT NULL DEFAULT 'benchmark'",
+        "ALTER TABLE runs ADD COLUMN IF NOT EXISTS score_input JSON",
+        "ALTER TABLE runs ADD COLUMN IF NOT EXISTS mask_config JSON",
+        "ALTER TABLE runs ADD COLUMN IF NOT EXISTS tolerance JSON",
+        "ALTER TABLE runs ADD COLUMN IF NOT EXISTS repro_metadata JSON",
+        "ALTER TABLE runs ADD COLUMN IF NOT EXISTS score_input_hash VARCHAR(64)",
+        "ALTER TABLE runs ADD COLUMN IF NOT EXISTS mask_hash VARCHAR(64)",
+        "CREATE INDEX IF NOT EXISTS ix_runs_mode ON runs (mode)",
+        "CREATE INDEX IF NOT EXISTS ix_runs_score_input_hash ON runs (score_input_hash)",
+        "CREATE INDEX IF NOT EXISTS ix_runs_mask_hash ON runs (mask_hash)",
+    ]
+    with engine.begin() as conn:
+        for stmt in statements:
+            conn.execute(text(stmt))
+
+
 def main() -> None:
     client = _minio_client()
     _ensure_bucket(client)
+    _apply_online_schema_migrations()
 
     while True:
         session = SessionLocal()
