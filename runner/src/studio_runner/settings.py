@@ -11,6 +11,16 @@ class Settings(BaseSettings):
     minio_bucket: str = "studio-artifacts"
     minio_secure: bool = False
 
+    local_artifacts_root: str = "/tmp/studio-run-artifacts"
+
+    sglang_jax_adapter_mode: str = "auto"
+    sglang_jax_root: str = "/workspaces/sglang-jax"
+    sglang_jax_bench_entrypoint: str | None = None
+    sglang_jax_bench_unittest_selector: str | None = None
+    sglang_jax_bench_command: str | None = None
+    sglang_jax_python_executable: str = "python3"
+    sglang_jax_bench_timeout_seconds: int = 900
+
     model_config = SettingsConfigDict(env_prefix="STUDIO_", extra="ignore")
 
 

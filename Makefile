@@ -13,7 +13,7 @@ down:
 	docker compose down -v
 
 test:
-	docker compose run --rm api pytest -q /app/api/tests
+	docker compose run --build --rm api pytest -q /app/api/tests /app/runner/tests
 
 smoke:
 	bash scripts/smoke_compose.sh

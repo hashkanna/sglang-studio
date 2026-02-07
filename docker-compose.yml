@@ -49,9 +49,16 @@ services:
       STUDIO_MINIO_SECRET_KEY: minio123
       STUDIO_MINIO_BUCKET: studio-artifacts
       STUDIO_MINIO_SECURE: "false"
+      STUDIO_LOCAL_ARTIFACTS_ROOT: /tmp/studio-run-artifacts
+      STUDIO_SGLANG_JAX_ADAPTER_MODE: auto
+      STUDIO_SGLANG_JAX_ROOT: /workspaces/sglang-jax
+      STUDIO_SGLANG_JAX_BENCH_ENTRYPOINT: test/srt/test_bench_score.py
+      STUDIO_SGLANG_JAX_BENCH_TIMEOUT_SECONDS: "900"
     depends_on:
       - postgres
       - minio
+    volumes:
+      - ../sglang-jax:/workspaces/sglang-jax:ro
 
   ui:
     build:

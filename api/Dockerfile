@@ -11,6 +11,7 @@ RUN pip install --no-cache-dir -r /app/requirements.txt
 COPY api/src /app/api/src
 COPY api/tests /app/api/tests
 COPY runner/src /app/runner/src
+COPY runner/tests /app/runner/tests
 
 ENV PYTHONPATH=/app/api/src:/app/runner/src
 

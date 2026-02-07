@@ -10,9 +10,9 @@ from minio.error import S3Error
 from sqlalchemy import text
 from sqlalchemy.orm import Session
 
+from studio_runner.adapters import run_backend_inference
 from studio_runner.db import SessionLocal
 from studio_runner.models import Run
-from studio_runner.mock_adapter import run_mock_inference
 from studio_runner.settings import settings
 
 
@@ -123,7 +123,8 @@ def main() -> None:
                 time.sleep(settings.poll_interval_seconds)
                 continue
 
-            result = run_mock_inference(
+            result = run_backend_inference(
+                run_id=claimed["id"],
                 backend=claimed["backend"],
                 prompt=claimed["prompt"],
                 parameters=claimed["parameters"] or {},
