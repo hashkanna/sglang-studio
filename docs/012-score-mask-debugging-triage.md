@@ -20,6 +20,26 @@ Current gaps for Score/Mask work:
 - mask configuration is hard to iterate without custom scripts
 - insufficient token-step observability for debugging kernel/runtime behavior
 
+## Current-State Reality Check
+
+Relative to Score API parity needs, current implementation is still missing critical pieces:
+
+1. Adapters do not yet return real token-level Score API outputs
+- current run result focuses on aggregate fields (`score`, `latency_ms`, `throughput_items_per_s`)
+- score value is still synthetic/stable-hash based in current wrap adapters
+
+2. Mask is not first-class in request UX/data model
+- no dedicated fields for mask preset/custom tensor in current playground flow
+
+3. Compare API/view is aggregate-only
+- current compare response emphasizes scalar deltas
+- no token-by-token mismatch table, no tolerance-based pass/fail on token deltas
+
+4. Score API input shape is not explicit in UI
+- no structured `query + items/targets + mask + score options` form yet
+
+These points make parity debugging possible only in a limited way; day-to-day Score/Mask investigation still requires external scripts.
+
 ## Priority Features for Score/Mask Workflow
 
 ### P0 (M1 extension)
@@ -35,6 +55,10 @@ Current gaps for Score/Mask work:
 3. Token-level debug payload in API
 - Return token logprobs and token ranks per position.
 - Include first-divergence summary in compare output.
+
+4. Tolerance-based token parity gate
+- configurable epsilon (example: `1e-6`) for token score comparison
+- run-level status: PASS when all compared token deltas are within tolerance
 
 ### P1 (M2 candidate)
 
@@ -56,6 +80,12 @@ Adjust M1 priority order for this use case:
 2. Per-token loss diff chart in Compare View.
 3. Score-mode playground UX.
 4. Gate badges over score/mask-specific thresholds.
+
+Minimum useful milestone slice (strict):
+1. Structured Score API form (query/targets/mask/tolerance).
+2. Real Score API adapter execution returning token-level outputs.
+3. Token diff table with mismatch highlighting and PASS/FAIL verdict.
+4. Save/load parity test cases for repeat runs.
 
 ## Data Contract Additions (Draft)
 
