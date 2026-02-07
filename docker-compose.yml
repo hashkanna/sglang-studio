@@ -1,0 +1,70 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: studio-postgres
+    environment:
+      POSTGRES_DB: studio
+      POSTGRES_USER: studio
+      POSTGRES_PASSWORD: studio
+    ports:
+      - "5432:5432"
+    volumes:
+      - studio_pgdata:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio:RELEASE.2024-11-07T00-52-20Z
+    container_name: studio-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio123
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - studio_minio_data:/data
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    container_name: studio-api
+    environment:
+      STUDIO_DB_DSN: postgresql+psycopg://studio:studio@postgres:5432/studio
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+
+  runner:
+    build:
+      context: .
+      dockerfile: runner/Dockerfile
+    container_name: studio-runner
+    environment:
+      STUDIO_DB_DSN: postgresql+psycopg://studio:studio@postgres:5432/studio
+      STUDIO_POLL_INTERVAL_SECONDS: "0.5"
+      STUDIO_MINIO_ENDPOINT: minio:9000
+      STUDIO_MINIO_ACCESS_KEY: minio
+      STUDIO_MINIO_SECRET_KEY: minio123
+      STUDIO_MINIO_BUCKET: studio-artifacts
+      STUDIO_MINIO_SECURE: "false"
+    depends_on:
+      - postgres
+      - minio
+
+  ui:
+    build:
+      context: .
+      dockerfile: ui/Dockerfile
+    container_name: studio-ui
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - api
+
+volumes:
+  studio_pgdata:
+  studio_minio_data:

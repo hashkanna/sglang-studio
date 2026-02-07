@@ -31,10 +31,43 @@ It is designed for:
 - UI specification: `docs/003-ui-spec.md`
 - MVP milestones: `docs/004-mvp-plan.md`
 - Open-source strategy: `docs/005-open-source-strategy.md`
+- Tech stack decisions: `docs/006-tech-stack.md`
+- Studio benchmark integration RFC: `docs/007-bench-integration-rfc.md`
+- Testing strategy: `docs/008-testing-strategy.md`
+- Inspiration and comparables: `docs/009-inspiration-and-comparables.md`
 
 ## Status
 
-Planning and architecture phase.
+Milestone 0 scaffold in progress (local-first vertical slice).
+
+## Quickstart
+
+```bash
+make up
+```
+
+Endpoints:
+- UI: `http://localhost:5173`
+- API: `http://localhost:8000`
+- MinIO Console: `http://localhost:9001`
+
+Run tests:
+
+```bash
+make test
+```
+
+Run smoke validation:
+
+```bash
+make smoke
+```
+
+Stop and clean up:
+
+```bash
+make down
+```
 
 ## License
 
