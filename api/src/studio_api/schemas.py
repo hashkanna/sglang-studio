@@ -92,6 +92,31 @@ class CompareRequest(BaseModel):
     right_run_id: str
 
 
+class TokenDiffRow(BaseModel):
+    index: int
+    token: str
+    left_logprob: float
+    right_logprob: float
+    abs_diff: float
+    rel_diff: float
+    is_match: bool
+
+
+class TokenLossDiffSummary(BaseModel):
+    pair_count: int
+    max_abs_nll_diff: float
+    mean_abs_nll_diff: float
+
+
+class RankDeltaSummary(BaseModel):
+    pair_count: float
+    worst_rank_drop: float
+    mean_abs_rank_delta: float
+    mrr_left: float
+    mrr_right: float
+    mrr_delta: float
+
+
 class CompareResponse(BaseModel):
     left_run_id: str
     right_run_id: str
@@ -99,3 +124,20 @@ class CompareResponse(BaseModel):
     latency_ms_diff: float
     latency_pct_diff: float
     throughput_items_per_s_diff: float
+    token_abs_epsilon: float
+    token_rel_epsilon: float
+    token_parity_pass: bool
+    score_parity_pass: bool
+    score_parity_threshold: float
+    latency_regression_pass: bool
+    latency_regression_pct_threshold: float
+    overall_pass: bool
+    token_data_available: bool
+    token_pair_count: int
+    token_mismatch_count: int
+    first_divergence_index: int | None
+    max_token_abs_diff: float
+    mean_token_abs_diff: float
+    token_diffs: list[TokenDiffRow]
+    token_loss_diff_summary: TokenLossDiffSummary
+    rank_delta_summary: RankDeltaSummary

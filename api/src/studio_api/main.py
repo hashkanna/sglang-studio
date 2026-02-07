@@ -147,16 +147,10 @@ def compare_runs(payload: CompareRequest, session: Session = Depends(get_session
 
     left_result = left.result_json or {}
     right_result = right.result_json or {}
-    diff = compare_results(left_result, right_result)
+    tolerance = left.tolerance or right.tolerance
+    diff = compare_results(left_result, right_result, tolerance=tolerance)
 
-    return CompareResponse(
-        left_run_id=left.id,
-        right_run_id=right.id,
-        score_abs_diff=diff["score_abs_diff"],
-        latency_ms_diff=diff["latency_ms_diff"],
-        latency_pct_diff=diff["latency_pct_diff"],
-        throughput_items_per_s_diff=diff["throughput_items_per_s_diff"],
-    )
+    return CompareResponse(left_run_id=left.id, right_run_id=right.id, **diff)
 
 
 @app.post("/api/v1/runs/{run_id}/cancel", response_model=RunView)
