@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import pytest
 
-from studio_runner.jax_bench_adapter import AdapterExecutionError, parse_benchmark_metrics
+from studio_runner.adapter_errors import AdapterExecutionError
+from studio_runner.jax_bench_adapter import parse_benchmark_metrics
 
 
 def test_parse_benchmark_metrics_extracts_core_fields() -> None:

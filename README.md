@@ -42,7 +42,9 @@ Milestone 0 scaffold complete (local-first vertical slice).
 
 Milestone 1 kickoff:
 - `sglang-jax` runner adapter is wired in wrap-first mode (`STUDIO_SGLANG_JAX_ADAPTER_MODE=auto`).
+- `sglang-pytorch` runner adapter is wired in wrap-first mode (`STUDIO_SGLANG_PYTORCH_ADAPTER_MODE=auto`).
 - Runner attempts to execute `sglang-jax` benchmark entrypoints and parses latency/throughput from benchmark output.
+- Runner attempts to execute `sglang-pytorch` benchmark entrypoints and parses latency/throughput from benchmark output.
 - If the local benchmark environment is unavailable, runner falls back to deterministic mock results and records adapter error details in `result_json.adapter_error`.
 
 ## Quickstart
@@ -62,7 +64,7 @@ Run tests:
 make test
 ```
 
-Run modes for the JAX adapter (runner env):
+Run modes for benchmark adapters (runner env):
 - `auto` (default): try real benchmark wrapper, fallback to mock.
 - `bench`: require real benchmark wrapper (run fails on adapter errors).
 - `mock`: force deterministic mock results.
