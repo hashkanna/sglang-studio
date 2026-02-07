@@ -38,6 +38,7 @@ It is designed for:
 - Runtime engineering feedback triage: `docs/010-runtime-engineering-feedback-triage.md`
 - Product value-gap triage: `docs/011-product-value-gap-triage.md`
 - Score/mask debugging triage: `docs/012-score-mask-debugging-triage.md`
+- Score API M1a implementation checklist: `docs/013-score-api-m1a-implementation-checklist.md`
 
 ## Status
 

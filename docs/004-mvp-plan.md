@@ -59,3 +59,4 @@ Exit Criteria
 - Runtime engineering feedback triage and prioritized follow-ups: `docs/010-runtime-engineering-feedback-triage.md`
 - Product value-gap triage and M1 prioritization update: `docs/011-product-value-gap-triage.md`
 - Score API and mask-debugging focused triage: `docs/012-score-mask-debugging-triage.md`
+- Score API M1a implementation checklist: `docs/013-score-api-m1a-implementation-checklist.md`

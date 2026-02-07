@@ -87,6 +87,9 @@ Minimum useful milestone slice (strict):
 3. Token diff table with mismatch highlighting and PASS/FAIL verdict.
 4. Save/load parity test cases for repeat runs.
 
+Implementation checklist:
+- `docs/013-score-api-m1a-implementation-checklist.md`
+
 ## Data Contract Additions (Draft)
 
 Run result additions:
