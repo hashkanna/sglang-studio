@@ -53,3 +53,7 @@ Deliverables
 
 Exit Criteria
 - Teams can run repeatable benchmark suites and track regressions over time.
+
+## Deferred Backlog
+
+- Runtime engineering feedback triage and prioritized follow-ups: `docs/010-runtime-engineering-feedback-triage.md`
